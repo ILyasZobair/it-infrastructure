@@ -110,6 +110,62 @@
     </section>
 
     <section class="mission-section section" id="missions">
+      
+<section class="section" id="network-lab">
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow"><span>02B</span> TOPOLOGY BUILDER</div>
+      <h2>Network <span>Playground.</span></h2>
+    </div>
+    <p>Ajoutez des équipements, configurez leurs adresses IP et testez la connectivité simulée.</p>
+  </div>
+
+  <div class="topology-layout">
+    <aside class="topology-sidebar">
+      <h3>ÉQUIPEMENTS</h3>
+      <button class="device-add" data-device="PC"><span>▣</span><span><b>PC Client</b><small>Terminal utilisateur</small></span><strong>+</strong></button>
+      <button class="device-add" data-device="Switch"><span>◈</span><span><b>Switch</b><small>Couche 2</small></span><strong>+</strong></button>
+      <button class="device-add" data-device="Router"><span>⌘</span><span><b>Router</b><small>Passerelle réseau</small></span><strong>+</strong></button>
+      <button class="device-add" data-device="Server"><span>▤</span><span><b>Server</b><small>Services IT</small></span><strong>+</strong></button>
+      <div class="topology-help"><b>COMMENT JOUER</b><p>1. Ajoutez deux appareils.</p><p>2. Sélectionnez un appareil pour configurer son IP.</p><p>3. Reliez les appareils.</p><p>4. Testez le ping.</p></div>
+    </aside>
+
+    <div class="topology-main">
+      <div class="topology-toolbar">
+        <span><i class="pulse"></i> SIMULATEUR LOCAL</span>
+        <div><button id="connect-mode">↔ Relier</button><button id="clear-topology">Réinitialiser</button></div>
+      </div>
+      <div id="topology-canvas" class="topology-canvas">
+        <div class="topology-empty" id="topology-empty"><span>⌘</span><b>VOTRE TOPOLOGIE EST VIDE</b><small>Ajoutez un équipement pour commencer.</small></div>
+        <svg id="topology-wires" aria-hidden="true"></svg>
+        <div id="topology-nodes"></div>
+      </div>
+      <div class="topology-footer"><span id="device-count">0 équipements</span><span id="link-count">0 connexions</span></div>
+    </div>
+  </div>
+
+  <div class="device-config">
+    <div class="config-heading"><div><div class="eyebrow">DEVICE CONFIGURATION</div><h3 id="config-title">Sélectionnez un appareil</h3></div><span class="config-indicator">● SIMULATION</span></div>
+    <div class="config-fields">
+      <label>Nom de l'appareil<input id="device-name" placeholder="Ex. PC-01" disabled></label>
+      <label>Adresse IPv4<input id="device-ip" placeholder="192.168.1.10" disabled></label>
+      <label>Masque réseau<input id="device-mask" value="255.255.255.0" disabled></label>
+      <label>Passerelle<input id="device-gateway" placeholder="192.168.1.1" disabled></label>
+    </div>
+    <div class="config-actions"><p id="config-message">Ajoutez un appareil puis sélectionnez-le.</p><button id="save-device" class="btn btn-primary" disabled>Enregistrer la configuration</button></div>
+  </div>
+
+  <div class="ping-panel">
+    <div><div class="eyebrow">CONNECTIVITY TEST</div><h3>Diagnostic réseau</h3></div>
+    <div class="ping-controls"><label>Source<select id="ping-source"><option value="">Sélectionner</option></select></label><label>Destination<select id="ping-target"><option value="">Sélectionner</option></select></label><button id="run-ping" class="btn btn-primary">PING ↗</button></div>
+    <div id="ping-result" class="ping-result" aria-live="polite">En attente d'un test de connectivité.</div>
+  </div>
+</section>
+
+
+      
+      
+      
       <div class="section-heading">
         <div><div class="eyebrow"><span>03</span> MODE CHALLENGE</div><h2>Missions <span>IT.</span></h2></div>
         <p>Complétez les défis pour gagner de l'expérience.</p>
