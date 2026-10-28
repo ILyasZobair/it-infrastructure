@@ -4,211 +4,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070b14">
-  <meta name="description" content="IT Infrastructure Simulator — laboratoire interactif de réseaux, systèmes et cybersécurité.">
-  <title>INFRA//LAB — IT Infrastructure Simulator</title>
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="INFRA LAB - Laboratoire interactif de réseaux, systèmes et cybersécurité.">
+  <title>INFRA//LAB — Digital Infrastructure</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-
   <header class="topbar">
-    <a class="brand" href="#home">
-      <span class="brand-icon">I<span>/</span>L</span>
-      <span>INFRA<span class="brand-muted">//LAB</span><small>INFRASTRUCTURE SIMULATOR</small></span>
-    </a>
+    <a class="brand" href="#home">INFRA<span>//</span>LAB</a>
     <nav>
-      <a href="#dashboard">Dashboard</a>
-      <a href="#labs">Laboratoires</a>
+      <a href="#labs">Labs</a>
+      <a href="#network">Réseau</a>
       <a href="#missions">Missions</a>
     </nav>
-    <div class="top-status"><span class="pulse"></span> SYSTEM ONLINE</div>
+    <div class="status"><span class="dot"></span> SYSTEM ONLINE</div>
   </header>
 
   <main>
     <section class="hero" id="home">
       <div class="hero-copy">
-        <div class="eyebrow"><span>01</span> ENVIRONNEMENT D'APPRENTISSAGE IT</div>
-        <h1>BUILD.<br>CONFIGURE.<br><span>MASTER.</span></h1>
-        <p class="hero-description">
-          Votre centre d'entraînement pour les réseaux, les serveurs
-          et l'infrastructure numérique. Apprenez par la pratique.
+        <p class="eyebrow">DIGITAL INFRASTRUCTURE / LEARNING PLATFORM</p>
+        <h1>BUILD. CONNECT.<br><span>SECURE.</span></h1>
+        <p class="hero-text">
+          Apprends les réseaux, les systèmes et la cybersécurité
+          à travers des laboratoires interactifs.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#labs">Explorer les Labs <span>↗</span></a>
-          <a class="btn btn-ghost" href="#missions">Voir les missions</a>
+          <a class="btn primary" href="#labs">Explorer les Labs ↗</a>
+          <a class="btn secondary" href="#network">Tester le réseau</a>
         </div>
-        <div class="hero-meta">
-          <span><i class="pulse"></i> LABS INTERACTIFS</span>
-          <span>MODE APPRENTISSAGE</span>
-          <span>V. 1.0.0</span>
+        <div class="hero-stats">
+          <div><strong id="xp">0</strong><small>XP GAGNÉS</small></div>
+          <div><strong id="level">01</strong><small>NIVEAU</small></div>
+          <div><strong id="completed">0</strong><small>MISSIONS</small></div>
         </div>
       </div>
-
-      <div class="network-visual" aria-label="Illustration d'une topologie réseau">
-        <div class="visual-orbit orbit-a"></div>
-        <div class="visual-orbit orbit-b"></div>
-        <div class="visual-grid"></div>
-        <div class="core-node">
-          <span class="core-symbol">⌘</span>
-          <strong>CORE</strong>
-          <small>NETWORK ENGINE</small>
-        </div>
-        <div class="net-node node-router"><span>◈</span><b>ROUTER</b><small>192.168.1.1</small></div>
-        <div class="net-node node-server"><span>▤</span><b>SERVER</b><small>192.168.1.10</small></div>
-        <div class="net-node node-linux"><span>⌁</span><b>LINUX</b><small>192.168.1.20</small></div>
-        <div class="net-node node-client"><span>▣</span><b>CLIENT</b><small>192.168.1.100</small></div>
-        <svg class="network-lines" viewBox="0 0 500 440" aria-hidden="true">
-          <path d="M250 220 L100 105 L390 105 L410 325 L105 340 Z"/>
-          <path d="M250 220 L390 105 M250 220 L410 325 M250 220 L105 340"/>
-          <circle cx="250" cy="220" r="4"/>
-          <circle cx="100" cy="105" r="3"/>
-          <circle cx="390" cy="105" r="3"/>
-          <circle cx="410" cy="325" r="3"/>
-          <circle cx="105" cy="340" r="3"/>
-        </svg>
-        <div class="visual-label label-top">NETWORK TOPOLOGY <span>● LIVE</span></div>
-        <div class="visual-label label-bottom">PACKETS <span>ENCRYPTED</span></div>
+      <div class="visual">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="core"><span>INFRA</span><b>LAB</b><small>NETWORK CORE</small></div>
+        <div class="node n1">PC-01</div>
+        <div class="node n2">RTR-01</div>
+        <div class="node n3">SRV-01</div>
+        <div class="node n4">SW-01</div>
+        <div class="scan"></div>
       </div>
-    </section>
-
-    <section class="stats" id="dashboard">
-      <div class="stat-card"><span class="stat-icon">⌘</span><div><small>DOMAINES IT</small><strong>04</strong><p>Axes techniques</p></div></div>
-      <div class="stat-card"><span class="stat-icon">▣</span><div><small>MISSIONS</small><strong id="mission-count">06</strong><p>Défis disponibles</p></div></div>
-      <div class="stat-card"><span class="stat-icon">↗</span><div><small>VOTRE XP</small><strong id="xp">000</strong><p>Points gagnés</p></div></div>
-      <div class="stat-card"><span class="stat-icon">◎</span><div><small>NIVEAU</small><strong id="level">01</strong><p id="rank">IT TRAINEE</p></div></div>
     </section>
 
     <section class="section" id="labs">
       <div class="section-heading">
-        <div><div class="eyebrow"><span>02</span> ZONE D'ENTRAÎNEMENT</div><h2>Choisissez votre <span>LAB.</span></h2></div>
-        <p>Développez vos compétences dans des environnements guidés.</p>
+        <div><p class="eyebrow">01 / TRAINING ENVIRONMENT</p><h2>Choose your <span>Lab.</span></h2></div>
+        <p>Des exercices pratiques pour développer tes compétences techniques.</p>
       </div>
 
       <div class="lab-grid">
         <article class="lab-card">
-          <div class="lab-art art-network"><span class="art-big">⌘</span><span class="art-tag">NETWORK ENGINEERING</span><div class="mini-nodes">● ── ◈ ── ●</div></div>
-          <div class="lab-content"><div class="card-top"><span class="category">01 / NETWORKS</span><span class="difficulty">DÉBUTANT</span></div><h3>Cisco Network Lab</h3><p>Adresses IP, VLAN, switching et configuration réseau.</p><div class="tags"><span>TCP/IP</span><span>VLAN</span><span>ROUTING</span></div><button class="lab-button" data-lab="network">Lancer le laboratoire <span>↗</span></button></div>
+          <div class="card-icon">⌘</div><span class="tag">NETWORKING</span>
+          <h3>Network Engineering</h3>
+          <p>IP, masques, sous-réseaux, ping et topologies réseau.</p>
+          <a href="#network">Ouvrir le laboratoire ↗</a>
         </article>
         <article class="lab-card">
-          <div class="lab-art art-windows"><span class="art-big">▤</span><span class="art-tag">SERVER ADMINISTRATION</span><div class="mini-nodes">AD · DNS · DHCP</div></div>
-          <div class="lab-content"><div class="card-top"><span class="category">02 / WINDOWS</span><span class="difficulty">INTERMÉDIAIRE</span></div><h3>Windows Server</h3><p>Active Directory, comptes utilisateurs, DNS et DHCP.</p><div class="tags"><span>ACTIVE DIRECTORY</span><span>DNS</span></div><button class="lab-button" data-lab="windows">Lancer le laboratoire <span>↗</span></button></div>
+          <div class="card-icon">▣</div><span class="tag">MICROSOFT</span>
+          <h3>Windows Server</h3>
+          <p>Découvre Active Directory, DNS, DHCP et la gestion des utilisateurs.</p>
+          <a href="#missions">Lancer une mission ↗</a>
         </article>
         <article class="lab-card">
-          <div class="lab-art art-linux"><span class="art-big">⌁</span><span class="art-tag">LINUX SYSTEMS</span><div class="mini-nodes">$ sudo systemctl status</div></div>
-          <div class="lab-content"><div class="card-top"><span class="category">03 / LINUX</span><span class="difficulty">DÉBUTANT</span></div><h3>Linux Command Center</h3><p>Terminal pédagogique, permissions, services et réseau.</p><div class="tags"><span>BASH</span><span>SSH</span><span>PERMISSIONS</span></div><button class="lab-button" data-lab="linux">Lancer le laboratoire <span>↗</span></button></div>
+          <div class="card-icon">$_</div><span class="tag">LINUX</span>
+          <h3>Linux Terminal</h3>
+          <p>Entraîne-toi aux commandes essentielles et à la gestion des fichiers.</p>
+          <a href="#missions">Lancer une mission ↗</a>
         </article>
         <article class="lab-card">
-          <div class="lab-art art-virtual"><span class="art-big">⬡</span><span class="art-tag">VIRTUAL INFRASTRUCTURE</span><div class="mini-nodes">VM 01 ─ VM 02 ─ HOST</div></div>
-          <div class="lab-content"><div class="card-top"><span class="category">04 / VIRTUALISATION</span><span class="difficulty">INTERMÉDIAIRE</span></div><h3>Virtualization Lab</h3><p>Machines virtuelles, ressources, stockage et réseaux virtuels.</p><div class="tags"><span>VMWARE</span><span>VIRTUALBOX</span><span>VM</span></div><button class="lab-button" data-lab="virtual">Lancer le laboratoire <span>↗</span></button></div>
+          <div class="card-icon">⌬</div><span class="tag">SECURITY</span>
+          <h3>Cybersecurity</h3>
+          <p>Permissions, mots de passe, pare-feu et bonnes pratiques de sécurité.</p>
+          <a href="#missions">Lancer une mission ↗</a>
         </article>
       </div>
     </section>
 
-    <section class="mission-section section" id="missions">
-      
-<section class="section" id="network-lab">
-  <div class="section-heading">
-    <div>
-      <div class="eyebrow"><span>02B</span> TOPOLOGY BUILDER</div>
-      <h2>Network <span>Playground.</span></h2>
-    </div>
-    <p>Ajoutez des équipements, configurez leurs adresses IP et testez la connectivité simulée.</p>
-  </div>
-
-  <div class="topology-layout">
-    <aside class="topology-sidebar">
-      <h3>ÉQUIPEMENTS</h3>
-      <button class="device-add" data-device="PC"><span>▣</span><span><b>PC Client</b><small>Terminal utilisateur</small></span><strong>+</strong></button>
-      <button class="device-add" data-device="Switch"><span>◈</span><span><b>Switch</b><small>Couche 2</small></span><strong>+</strong></button>
-      <button class="device-add" data-device="Router"><span>⌘</span><span><b>Router</b><small>Passerelle réseau</small></span><strong>+</strong></button>
-      <button class="device-add" data-device="Server"><span>▤</span><span><b>Server</b><small>Services IT</small></span><strong>+</strong></button>
-      <div class="topology-help"><b>COMMENT JOUER</b><p>1. Ajoutez deux appareils.</p><p>2. Sélectionnez un appareil pour configurer son IP.</p><p>3. Reliez les appareils.</p><p>4. Testez le ping.</p></div>
-    </aside>
-
-    <div class="topology-main">
-      <div class="topology-toolbar">
-        <span><i class="pulse"></i> SIMULATEUR LOCAL</span>
-        <div><button id="connect-mode">↔ Relier</button><button id="clear-topology">Réinitialiser</button></div>
-      </div>
-      <div id="topology-canvas" class="topology-canvas">
-        <div class="topology-empty" id="topology-empty"><span>⌘</span><b>VOTRE TOPOLOGIE EST VIDE</b><small>Ajoutez un équipement pour commencer.</small></div>
-        <svg id="topology-wires" aria-hidden="true"></svg>
-        <div id="topology-nodes"></div>
-      </div>
-      <div class="topology-footer"><span id="device-count">0 équipements</span><span id="link-count">0 connexions</span></div>
-    </div>
-  </div>
-
-  <div class="device-config">
-    <div class="config-heading"><div><div class="eyebrow">DEVICE CONFIGURATION</div><h3 id="config-title">Sélectionnez un appareil</h3></div><span class="config-indicator">● SIMULATION</span></div>
-    <div class="config-fields">
-      <label>Nom de l'appareil<input id="device-name" placeholder="Ex. PC-01" disabled></label>
-      <label>Adresse IPv4<input id="device-ip" placeholder="192.168.1.10" disabled></label>
-      <label>Masque réseau<input id="device-mask" value="255.255.255.0" disabled></label>
-      <label>Passerelle<input id="device-gateway" placeholder="192.168.1.1" disabled></label>
-    </div>
-    <div class="config-actions"><p id="config-message">Ajoutez un appareil puis sélectionnez-le.</p><button id="save-device" class="btn btn-primary" disabled>Enregistrer la configuration</button></div>
-  </div>
-
-  <div class="ping-panel">
-    <div><div class="eyebrow">CONNECTIVITY TEST</div><h3>Diagnostic réseau</h3></div>
-    <div class="ping-controls"><label>Source<select id="ping-source"><option value="">Sélectionner</option></select></label><label>Destination<select id="ping-target"><option value="">Sélectionner</option></select></label><button id="run-ping" class="btn btn-primary">PING ↗</button></div>
-    <div id="ping-result" class="ping-result" aria-live="polite">En attente d'un test de connectivité.</div>
-  </div>
-</section>
-
-
-      
-      
-      
+    <section class="section network-section" id="network">
       <div class="section-heading">
-        <div><div class="eyebrow"><span>03</span> MODE CHALLENGE</div><h2>Missions <span>IT.</span></h2></div>
-        <p>Complétez les défis pour gagner de l'expérience.</p>
+        <div><p class="eyebrow">02 / INTERACTIVE LAB</p><h2>Subnet <span>Calculator.</span></h2></div>
+        <p>Calcule les informations essentielles d'un réseau IPv4.</p>
       </div>
-      <div class="mission-list" id="mission-list">
-        <article class="mission-row"><div class="mission-number">01</div><div class="mission-info"><h3>Fixer une configuration IP</h3><p>NETWORKS · Corrigez l'adresse IP et la passerelle d'un poste.</p></div><span class="xp-reward">+100 XP</span><button class="mission-button" data-mission="ip">Démarrer</button></article>
-        <article class="mission-row"><div class="mission-number">02</div><div class="mission-info"><h3>Diagnostiquer un service DNS</h3><p>WINDOWS / LINUX · Identifiez le problème de résolution de noms.</p></div><span class="xp-reward">+150 XP</span><button class="mission-button" data-mission="dns">Démarrer</button></article>
-        <article class="mission-row"><div class="mission-number">03</div><div class="mission-info"><h3>Contrôler les permissions</h3><p>LINUX · Choisissez les permissions adaptées à un fichier.</p></div><span class="xp-reward">+120 XP</span><button class="mission-button" data-mission="permissions">Démarrer</button></article>
+
+      <div class="tool-panel">
+        <div class="form-grid">
+          <label>Adresse IPv4<input id="ip" value="192.168.1.10" placeholder="192.168.1.10"></label>
+          <label>Préfixe CIDR
+            <select id="cidr">
+              <option value="8">/8</option><option value="16">/16</option>
+              <option value="24" selected>/24</option><option value="25">/25</option>
+              <option value="26">/26</option><option value="27">/27</option>
+              <option value="28">/28</option><option value="29">/29</option>
+              <option value="30">/30</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn primary" id="calculate">Calculer le sous-réseau →</button>
+        <p id="calc-message" class="message" aria-live="polite"></p>
+        <div class="result-grid" id="results">
+          <div><small>NETWORK ID</small><strong>—</strong></div>
+          <div><small>MASQUE</small><strong>—</strong></div>
+          <div><small>BROADCAST</small><strong>—</strong></div>
+          <div><small>HÔTES UTILISABLES</small><strong>—</strong></div>
+          <div><small>PREMIER HÔTE</small><strong>—</strong></div>
+          <div><small>DERNIER HÔTE</small><strong>—</strong></div>
+        </div>
       </div>
     </section>
 
-    <section class="terminal-section section">
+    <section class="section" id="missions">
       <div class="section-heading">
-        <div><div class="eyebrow"><span>04</span> CONSOLE PÉDAGOGIQUE</div><h2>Command <span>Center.</span></h2></div>
-        <p>Testez quelques commandes réseau dans un environnement simulé.</p>
+        <div><p class="eyebrow">03 / CHALLENGE MODE</p><h2>Technical <span>Missions.</span></h2></div>
+        <p>Réponds correctement pour gagner des XP et débloquer des niveaux.</p>
       </div>
-      <div class="terminal">
-        <div class="terminal-bar"><div class="window-dots"><i></i><i></i><i></i></div><span>infra-lab@training:~</span><button id="clear-terminal">EFFACER</button></div>
-        <div class="terminal-output" id="terminal-output"><p>INFRA//LAB — SIMULATED TERMINAL</p><p>Environnement pédagogique. Tapez <b>help</b> pour les commandes.</p></div>
-        <form id="terminal-form" class="terminal-input-row">
-          <label for="terminal-input">student@infra-lab:~$</label>
-          <input id="terminal-input" autocomplete="off" placeholder="Tapez une commande..." aria-label="Commande simulée">
-          <button type="submit">EXÉCUTER ↗</button>
-        </form>
-      </div>
-      <p class="terminal-note">Cette console simule quelques commandes à des fins d'apprentissage. Elle ne modifie aucun système réel.</p>
-    </section>
 
-    <section class="bottom-cta">
-      <div><div class="eyebrow"><span>05</span> YOUR NEXT LEVEL STARTS HERE</div><h2>Build your skills.<br><span>Own your future.</span></h2><p>Apprenez. Testez. Diagnostiquez. Progressez.</p></div>
-      <a class="btn btn-primary" href="#labs">Accéder aux Labs ↗</a>
+      <div class="mission-panel">
+        <div class="mission-top"><span class="tag">MISSION 001</span><span id="mission-count">1 / 5</span></div>
+        <div class="progress"><div id="progress-bar"></div></div>
+        <h3 id="question">Quelle est l'adresse IPv4 de loopback la plus utilisée ?</h3>
+        <div id="answers" class="answers"></div>
+        <p id="feedback" aria-live="polite"></p>
+        <button id="next" class="btn primary" disabled>Mission suivante →</button>
+        <button id="restart" class="btn secondary hidden">Recommencer</button>
+      </div>
     </section>
   </main>
 
-  <footer><a class="brand footer-brand" href="#home"><span class="brand-icon">I<span>/</span>L</span><span>INFRA<span class="brand-muted">//LAB</span><small>IT INFRASTRUCTURE SIMULATOR</small></span></a><p>Projet éducatif · Infrastructure Digitale</p><span>© <span id="year"></span> INFRA//LAB</span></footer>
-
-  <dialog id="lab-dialog" class="lab-dialog">
-    <button class="dialog-close" id="dialog-close" aria-label="Fermer">×</button>
-    <div class="eyebrow">INTERACTIVE TRAINING MODULE</div>
-    <h2 id="dialog-title">Lab</h2>
-    <p id="dialog-description"></p>
-    <div id="dialog-body"></div>
-    <button class="btn btn-primary" id="dialog-action">Commencer le défi ↗</button>
-  </dialog>
+  <footer>
+    <a class="brand" href="#home">INFRA<span>//</span>LAB</a>
+    <p>Learn by building. Think like an engineer.</p>
+    <small>Projet pédagogique indépendant — Infrastructure Digitale.</small>
+  </footer>
 </body>
 </html>
