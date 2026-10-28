@@ -1,203 +1,186 @@
 
-const $ = (selector) => document.querySelector(selector);
+"use strict";
 
-const labData = {
-  network: {
-    title: "Cisco Network Lab",
-    description: "Apprenez les bases de l'adressage IP et du diagnostic réseau.",
-    question: "Quelle commande Linux permet de vérifier les adresses IP des interfaces ?",
-    options: ["ip addr", "mkdir network", "show users"],
-    answer: 0,
-    explanation: "La commande ip addr affiche les interfaces réseau et leurs adresses IP."
-  },
-  windows: {
-    title: "Windows Server Lab",
-    description: "Découvrez les rôles essentiels d'un serveur Windows.",
-    question: "Quel service permet de gérer les utilisateurs et les groupes d'un domaine ?",
-    options: ["Active Directory", "Paint", "Gestionnaire de tâches"],
-    answer: 0,
-    explanation: "Active Directory Domain Services centralise les comptes et les ressources d'un domaine."
-  },
-  linux: {
-    title: "Linux Command Center",
-    description: "Testez vos connaissances sur les commandes Linux.",
-    question: "Quelle commande affiche le répertoire courant ?",
-    options: ["pwd", "touch", "clear"],
-    answer: 0,
-    explanation: "pwd signifie print working directory et affiche le chemin courant."
-  },
-  virtual: {
-    title: "Virtualization Lab",
-    description: "Comprenez le rôle de l'hyperviseur et des machines virtuelles.",
-    question: "À quoi sert un hyperviseur ?",
-    options: [
-      "À créer et gérer des machines virtuelles",
-      "À remplacer une adresse IP",
-      "À chiffrer automatiquement tous les fichiers"
-    ],
-    answer: 0,
-    explanation: "Un hyperviseur permet de créer et d'exécuter plusieurs machines virtuelles sur un hôte."
+const $ = (id) => document.getElementById(id);
+
+function ipv4ToInt(ip) {
+  const parts = ip.trim().split(".");
+  if (parts.length !== 4) return null;
+
+  let value = 0;
+  for (const part of parts) {
+    if (!/^\d{1,3}$/.test(part)) return null;
+    const n = Number(part);
+    if (n < 0 || n > 255) return null;
+    value = (value * 256 + n) >>> 0;
   }
-};
+  return value >>> 0;
+}
 
-const missionData = {
-  ip: {
-    title: "Mission 01 — Configuration IP",
-    question: "Un PC possède l'adresse 192.168.1.25/24. Quelle passerelle est cohérente avec un routeur configuré en 192.168.1.1/24 ?",
-    options: ["192.168.1.1", "192.168.2.1", "255.255.255.0"],
-    answer: 0,
-    xp: 100
-  },
-  dns: {
-    title: "Mission 02 — Diagnostic DNS",
-    question: "Quelle commande Linux permet d'interroger un serveur DNS ?",
-    options: ["dig example.com", "mkdir example.com", "chmod dns"],
-    answer: 0,
-    xp: 150
-  },
-  permissions: {
-    title: "Mission 03 — Permissions Linux",
-    question: "Quelle commande donne au propriétaire les droits de lecture et d'écriture, et retire les droits aux autres ?",
-    options: ["chmod 600 fichier.txt", "ping 600", "ip addr 600"],
-    answer: 0,
-    xp: 120
+function intToIPv4(value) {
+  return [
+    (value >>> 24) & 255,
+    (value >>> 16) & 255,
+    (value >>> 8) & 255,
+    value & 255
+  ].join(".");
+}
+
+function calculateSubnet() {
+  const ipText = $("ip").value;
+  const ip = ipv4ToInt(ipText);
+  const prefix = Number($("cidr").value);
+  const message = $("calc-message");
+
+  if (ip === null) {
+    message.textContent = "Adresse IPv4 invalide. Exemple : 192.168.1.10";
+    return;
   }
-};
 
-let xp = Number(localStorage.getItem("infraLabXP")) || 0;
-let completed = JSON.parse(localStorage.getItem("infraLabCompleted") || "[]");
-let currentChallenge = null;
+  const mask = prefix === 0 ? 0 : (0xffffffff << (32 - prefix)) >>> 0;
+  const network = (ip & mask) >>> 0;
+  const broadcast = (network | (~mask >>> 0)) >>> 0;
+  const total = 2 ** (32 - prefix);
+  const usable = prefix <= 30 ? Math.max(0, total - 2) : prefix === 31 ? 2 : 1;
+  const first = prefix <= 30 ? network + 1 : network;
+  const last = prefix <= 30 ? broadcast - 1 : broadcast;
+
+  const values = [
+    intToIPv4(network),
+    intToIPv4(mask),
+    intToIPv4(broadcast),
+    usable.toLocaleString("fr-FR"),
+    intToIPv4(first >>> 0),
+    intToIPv4(last >>> 0)
+  ];
+
+  $("results").querySelectorAll("strong").forEach((el, i) => {
+    el.textContent = values[i];
+  });
+
+  message.textContent = "Calcul terminé. Préfixe IPv4 : /" + prefix;
+}
+
+$("calculate").addEventListener("click", calculateSubnet);
+$("ip").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") calculateSubnet();
+});
+$("cidr").addEventListener("change", calculateSubnet);
+calculateSubnet();
+
+const missions = [
+  {
+    q: "Quelle est l'adresse IPv4 de loopback la plus utilisée ?",
+    a: ["192.168.1.1", "127.0.0.1", "8.8.8.8", "255.255.255.0"],
+    correct: 1,
+    info: "127.0.0.1 permet à une machine de communiquer avec elle-même."
+  },
+  {
+    q: "Quel service traduit les noms de domaine en adresses IP ?",
+    a: ["DHCP", "FTP", "DNS", "SSH"],
+    correct: 2,
+    info: "DNS associe les noms de domaine aux adresses IP."
+  },
+  {
+    q: "Quel masque correspond au préfixe /24 ?",
+    a: ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.252"],
+    correct: 2,
+    info: "Un /24 correspond au masque 255.255.255.0."
+  },
+  {
+    q: "Quelle commande Linux affiche le répertoire courant ?",
+    a: ["ls", "pwd", "mkdir", "whoami"],
+    correct: 1,
+    info: "pwd affiche le chemin du répertoire courant."
+  },
+  {
+    q: "Quel service distribue automatiquement les adresses IP ?",
+    a: ["DNS", "HTTP", "DHCP", "SMTP"],
+    correct: 2,
+    info: "DHCP attribue automatiquement les paramètres IP aux clients."
+  }
+];
+
+let current = 0;
+let xp = 0;
+let completed = 0;
 let answered = false;
 
-function updateProgress() {
-  $("#xp").textContent = String(xp).padStart(3, "0");
-  $("#level").textContent = String(Math.floor(xp / 250) + 1).padStart(2, "0");
-  $("#rank").textContent = xp >= 500 ? "JUNIOR ENGINEER" : xp >= 250 ? "IT TECHNICIAN" : "IT TRAINEE";
-  document.querySelectorAll("[data-mission]").forEach(button => {
-    if (completed.includes(button.dataset.mission)) {
-      button.textContent = "✓ TERMINÉ";
-      button.disabled = true;
-    }
-  });
-  $("#mission-count").textContent = String(6 - completed.length).padStart(2, "0");
-}
-
-function openChallenge(data, key, isMission) {
-  currentChallenge = { ...data, key, isMission };
+function renderMission() {
+  const mission = missions[current];
   answered = false;
-  $("#dialog-title").textContent = data.title;
-  $("#dialog-description").textContent = isMission ? "Mission technique : choisissez la meilleure réponse." : data.description;
-  $("#dialog-body").innerHTML = `<p>${data.question}</p>` + data.options.map((option, index) =>
-    `<button class="challenge-option" data-option="${index}">${option}</button>`
-  ).join("") + `<p id="challenge-feedback" aria-live="polite"></p>`;
-  $("#dialog-action").textContent = "Vérifier la réponse";
-  $("#dialog-action").disabled = false;
-  $("#lab-dialog").showModal();
+  $("question").textContent = mission.q;
+  $("mission-count").textContent = `${current + 1} / ${missions.length}`;
+  $("progress-bar").style.width = `${(current / missions.length) * 100}%`;
+  $("feedback").textContent = "";
+  $("next").disabled = true;
+  $("next").classList.remove("hidden");
+  $("restart").classList.add("hidden");
+  $("answers").replaceChildren();
 
-  $("#dialog-body").querySelectorAll("[data-option]").forEach(button => {
-    button.addEventListener("click", () => {
-      if (answered) return;
-      $("#dialog-body").querySelectorAll("[data-option]").forEach(b => b.classList.remove("correct", "wrong"));
-      button.dataset.selected = "true";
-      button.style.borderColor = "var(--cyan)";
-      $("#challenge-feedback").textContent = "Réponse sélectionnée. Cliquez sur Vérifier la réponse.";
-    });
+  mission.a.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.className = "answer";
+    button.textContent = answer;
+    button.addEventListener("click", () => chooseAnswer(index));
+    $("answers").appendChild(button);
   });
 }
 
-function checkChallenge() {
-  if (!currentChallenge || answered) {
-    $("#lab-dialog").close();
-    return;
-  }
-  const selected = $("#dialog-body [data-selected='true']");
-  if (!selected) {
-    $("#challenge-feedback").textContent = "Choisissez une réponse avant de continuer.";
-    return;
-  }
+function chooseAnswer(index) {
+  if (answered) return;
   answered = true;
-  const isCorrect = Number(selected.dataset.option) === currentChallenge.answer;
-  selected.classList.add(isCorrect ? "correct" : "wrong");
 
-  if (isCorrect) {
-    $("#challenge-feedback").innerHTML = `<span class="success">Bonne réponse ! +${currentChallenge.xp || 50} XP</span>`;
-    if (currentChallenge.isMission && !completed.includes(currentChallenge.key)) {
-      xp += currentChallenge.xp;
-      completed.push(currentChallenge.key);
-      localStorage.setItem("infraLabXP", xp);
-      localStorage.setItem("infraLabCompleted", JSON.stringify(completed));
-      updateProgress();
-    } else if (!currentChallenge.isMission) {
-      xp += 50;
-      localStorage.setItem("infraLabXP", xp);
-      updateProgress();
-    }
-    $("#dialog-action").textContent = "Terminer";
+  const mission = missions[current];
+  const buttons = [...$("answers").querySelectorAll("button")];
+  buttons.forEach((button, i) => {
+    button.disabled = true;
+    if (i === mission.correct) button.classList.add("correct");
+  });
+
+  if (index === mission.correct) {
+    xp += 100;
+    completed++;
+    $("feedback").textContent = "✓ Bonne réponse ! " + mission.info;
+    $("feedback").style.color = "var(--green)";
   } else {
-    $("#challenge-feedback").innerHTML = `<span class="error">Pas encore. Relisez la question et réessayez lors d'une nouvelle tentative.</span>`;
-    $("#dialog-action").textContent = "Fermer";
+    buttons[index].classList.add("wrong");
+    $("feedback").textContent = "✗ Pas tout à fait. " + mission.info;
+    $("feedback").style.color = "var(--red)";
   }
+
+  $("xp").textContent = xp;
+  $("level").textContent = String(Math.floor(xp / 300) + 1).padStart(2, "0");
+  $("completed").textContent = completed;
+  $("progress-bar").style.width = `${((current + 1) / missions.length) * 100}%`;
+  $("next").disabled = false;
 }
 
-document.querySelectorAll("[data-lab]").forEach(button => {
-  button.addEventListener("click", () => {
-    openChallenge(labData[button.dataset.lab], button.dataset.lab, false);
-  });
-});
+$("next").addEventListener("click", () => {
+  if (!answered) return;
 
-document.querySelectorAll("[data-mission]").forEach(button => {
-  button.addEventListener("click", () => {
-    const key = button.dataset.mission;
-    if (!completed.includes(key)) openChallenge(missionData[key], key, true);
-  });
-});
-
-$("#dialog-action").addEventListener("click", checkChallenge);
-$("#dialog-close").addEventListener("click", () => $("#lab-dialog").close());
-$("#year").textContent = new Date().getFullYear();
-
-const terminalOutput = $("#terminal-output");
-const commandInput = $("#terminal-input");
-
-function terminalLine(text, className = "") {
-  const p = document.createElement("p");
-  p.textContent = text;
-  if (className) p.className = className;
-  terminalOutput.appendChild(p);
-  terminalOutput.scrollTop = terminalOutput.scrollHeight;
-}
-
-const commands = {
-  help: [
-    "Commandes disponibles :",
-    "help  — afficher les commandes",
-    "ip addr — afficher une IP simulée",
-    "ping 8.8.8.8 — simuler un test de connectivité",
-    "traceroute example.com — simuler un chemin réseau",
-    "hostname — afficher le nom de la machine",
-    "clear — effacer la console"
-  ],
-  "ip addr": ["eth0: UP", "inet 192.168.1.20/24", "gateway: 192.168.1.1"],
-  "ping 8.8.8.8": ["PING 8.8.8.8 (8.8.8.8)", "64 bytes from 8.8.8.8: time=12 ms", "Simulation terminée : 1 paquet envoyé, 1 reçu."],
-  "traceroute example.com": ["1  192.168.1.1  2 ms", "2  10.0.0.1  8 ms", "3  example.com  15 ms", "Chemin simulé terminé."],
-  hostname: ["infra-lab-client"]
-};
-
-$("#terminal-form").addEventListener("submit", event => {
-  event.preventDefault();
-  const command = commandInput.value.trim().toLowerCase();
-  if (!command) return;
-  terminalLine(`student@infra-lab:~$ ${command}`);
-  if (command === "clear") {
-    terminalOutput.replaceChildren();
-  } else if (commands[command]) {
-    commands[command].forEach(line => terminalLine(line, "success"));
+  if (current < missions.length - 1) {
+    current++;
+    renderMission();
   } else {
-    terminalLine(`Commande inconnue : ${command}. Tapez help.`, "error");
+    $("question").textContent = "Mission terminée !";
+    $("answers").replaceChildren();
+    $("feedback").textContent = `Tu as gagné ${xp} XP et terminé ${completed} missions avec succès.`;
+    $("next").classList.add("hidden");
+    $("restart").classList.remove("hidden");
+    $("progress-bar").style.width = "100%";
+    $("mission-count").textContent = "COMPLETED";
   }
-  commandInput.value = "";
 });
 
-$("#clear-terminal").addEventListener("click", () => terminalOutput.replaceChildren());
+$("restart").addEventListener("click", () => {
+  current = 0;
+  xp = 0;
+  completed = 0;
+  $("xp").textContent = "0";
+  $("level").textContent = "01";
+  $("completed").textContent = "0";
+  renderMission();
+});
 
-updateProgress();
+renderMission();
